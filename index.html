@@ -4,285 +4,307 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BEST SALES • from your brain to your footsteps</title>
+    
+    <!-- TAILWIND CDN + WARNING SUPPRESSOR -->
+    <script>
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+            if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+            originalWarn(...args);
+        };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vanilla Tilt.js for 3D tilt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js" 
+            integrity="sha512-wC/cunGGDjXSl9OHUH0RuqSyW4YNLlsPwhcLxwWW1CR4OeC2E1xpcdZz2DeQkEmums41laI+eGMw95IJ15SS3g==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
-        
-        :root {
-            --primary: 234 179 8;
-        }
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        
-        .logo-font {
-            font-family: 'Playfair Display', serif;
-        }
+       
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .logo-font { font-family: 'Playfair Display', serif; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes glowPulse { 0%,100% { box-shadow: 0 0 15px -5px rgb(234 179 8); } 50% { box-shadow: 0 0 35px 10px rgb(234 179 8); } }
+        @keyframes shine { 0% { transform: translateX(-150%); } 100% { transform: translateX(300%); } }
 
         .hero-bg {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+            background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
                               url('https://i.ibb.co/d4vbFtBG/happy-couple-shopping-outdoors-together.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-        }
-
-        .product-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .product-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        .glass-nav {
+            background: rgba(30, 30, 40, 0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
         }
 
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(to right, rgb(234 179 8), rgb(245 158 11));
-            z-index: 50;
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
         }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -6px;
+            left: 0;
+            background: linear-gradient(90deg, #facc15, #fbbf24);
+            transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            border-radius: 2px;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: #facc15 !important; }
+
+        .product-card {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+        .product-card:hover {
+            transform: translateY(-20px) scale(1.04) rotate(1deg);
+            box-shadow: 0 40px 70px -15px rgb(234 179 8 / 0.3);
+        }
+
+        .section-hidden { opacity: 0; transform: translateY(60px); transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .section-visible { opacity: 1; transform: translateY(0); }
+
+        .hero-title { animation: slideInLeft 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .hero-subtitle { animation: fadeInUp 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards; opacity: 0; }
+
+        .limited-badge { animation: glowPulse 2s infinite ease-in-out; }
+
+        .shine-overlay {
+            position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 1.5s infinite; pointer-events: none;
+        }
+
+        /* Simplified button – no glow animation */
+        .hero-btn {
+            background: linear-gradient(135deg, #facc15, #fbbf24);
+            color: #111827;
+            box-shadow: 0 10px 30px -10px rgba(250, 204, 21, 0.4);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 15px 40px -10px rgba(250, 204, 21, 0.5);
+        }
+
+        .hero-btn:active {
+            transform: scale(0.96);
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.12s ease-out;
+        }
+
+        .card-inner { transform-style: preserve-3d; transition: transform 0.2s; }
     </style>
 </head>
-<body class="bg-zinc-50 text-zinc-900">
-
+<body class="bg-zinc-950 text-white overflow-x-hidden">
     <!-- SCROLL PROGRESS -->
-    <div id="scroll-progress" class="scroll-progress w-0"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-400 shadow-[0_0_20px_rgb(234,179,8)] z-50 transition-all duration-100"></div>
 
     <!-- NAVBAR -->
-    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+    <nav class="glass-nav sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <!-- LOGO -->
             <div class="flex items-center gap-x-3">
-                <div class="w-9 h-9 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-inner">
-                    <i class="fa-solid fa-bolt text-zinc-900 text-2xl"></i>
-                </div>
+                <img src="https://i.ibb.co/LzkzGzxT/1e0c30dc2bc55a63036925a3a5b9eee4.jpg" 
+                     alt="BEST SALES Logo" 
+                     class="w-10 h-10 rounded-3xl object-cover shadow-2xl ring-2 ring-yellow-400/30">
                 <div>
-                    <span class="logo-font text-3xl font-bold tracking-tighter">BEST</span>
-                    <span class="logo-font text-3xl font-bold tracking-tighter text-yellow-400">SALES</span>
+                    <span class="logo-font text-4xl font-bold tracking-[-3px]">BEST</span>
+                    <span class="logo-font text-4xl font-bold tracking-[-3px] text-yellow-400">SALES</span>
                 </div>
             </div>
-
-            <!-- DESKTOP MENU -->
-            <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
-                <a href="#" onclick="smoothScrollTo('hero')" class="hover:text-yellow-400 transition">Home</a>
-                <a href="#" onclick="smoothScrollTo('products')" class="hover:text-yellow-400 transition">Shop</a>
-                <a href="#" onclick="smoothScrollTo('about')" class="hover:text-yellow-400 transition">About</a>
-                <a href="#" onclick="smoothScrollTo('contact')" class="hover:text-yellow-400 transition">Contact</a>
+            
+            <div class="hidden md:flex items-center gap-x-12 text-base font-semibold">
+                <a href="#" onclick="smoothScrollTo('hero')" class="nav-link hover:text-yellow-400 transition-colors">Home</a>
+                <a href="#" onclick="smoothScrollTo('products')" class="nav-link hover:text-yellow-400 transition-colors">Shop</a>
+                <a href="#" onclick="smoothScrollTo('contact')" class="nav-link hover:text-yellow-400 transition-colors">Contact</a>
             </div>
-
+            
             <div class="flex items-center gap-x-6">
-                <!-- SEARCH -->
-                <div class="relative hidden md:block">
-                    <input id="search-input" 
-                           type="text" 
-                           placeholder="Search products..." 
-                           oninput="filterProducts()"
-                           class="bg-zinc-100 border border-transparent focus:border-yellow-400 focus:bg-white w-72 pl-10 py-2.5 rounded-3xl text-sm outline-none transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
-                </div>
-
-                <!-- MOBILE HAMBURGER -->
-                <button onclick="toggleMobileMenu()" class="md:hidden text-2xl">
+                <button onclick="toggleMobileMenu()" class="md:hidden text-3xl text-white">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
-
-        <!-- MOBILE MENU -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-6 py-6">
-            <div class="flex flex-col gap-y-4 text-lg font-medium">
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-zinc-950 border-t border-white/10 px-6 py-8">
+            <div class="flex flex-col gap-y-6 text-xl font-medium">
                 <a href="#" onclick="smoothScrollTo('hero');toggleMobileMenu()" class="py-2">Home</a>
                 <a href="#" onclick="smoothScrollTo('products');toggleMobileMenu()" class="py-2">Shop</a>
-                <a href="#" onclick="smoothScrollTo('about');toggleMobileMenu()" class="py-2">About</a>
                 <a href="#" onclick="smoothScrollTo('contact');toggleMobileMenu()" class="py-2">Contact</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section id="hero" class="hero-bg h-screen flex items-center relative text-white">
+    <section id="hero" class="hero-bg h-screen flex items-center relative">
         <div class="max-w-7xl mx-auto px-6 z-10">
-            <div class="max-w-xl">
-                <h1 class="logo-font text-7xl md:text-8xl font-bold leading-none tracking-tighter mb-4">
-                    BEST<br>SALES
+            <div class="max-w-2xl">
+                <h1 class="hero-title logo-font text-7xl md:text-[110px] font-bold leading-none tracking-[-6px] mb-2">
+                    BEST<br><span class="text-yellow-400">SALES</span>
                 </h1>
-                <p class="text-2xl md:text-3xl font-light tracking-tight mb-10">
+                <p class="hero-subtitle text-3xl md:text-4xl font-light tracking-tight text-white/90 mb-6">
                     from your brain to your footsteps
                 </p>
-
                 <button onclick="smoothScrollTo('products')" 
-                        class="group inline-flex items-center gap-x-4 bg-white text-zinc-900 px-10 py-6 rounded-3xl text-lg font-semibold hover:bg-yellow-400 transition-all shadow-2xl">
-                    <span>CLICK HERE TO SHOP</span>
-                    <div class="w-8 h-8 bg-zinc-900 text-white rounded-2xl flex items-center justify-center group-hover:rotate-45 transition">
-                        <i class="fa-solid fa-arrow-down"></i>
+                        class="hero-btn group inline-flex items-center gap-x-5 px-12 py-7 rounded-3xl text-xl font-bold tracking-wider mb-10">
+                    <span>GRAB THE VIBES</span>
+                    <div class="w-10 h-10 bg-zinc-950 text-white rounded-3xl flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+                        <i class="fa-solid fa-arrow-down text-xl"></i>
                     </div>
                 </button>
+
+                <p class="text-xl md:text-2xl font-light italic text-yellow-300/90 max-w-3xl leading-relaxed">
+                    "The best websites don't just sell products — they sell dreams, one click at a time."
+                </p>
             </div>
         </div>
 
-        <div class="absolute bottom-10 left-1/2 flex flex-col items-center gap-y-2 text-white/70">
-            <div class="text-[10px] tracking-[3px] font-medium">SCROLL TO DISCOVER</div>
-            <i class="fa-solid fa-chevron-down animate-bounce text-xl"></i>
+        <div class="absolute bottom-12 right-8 hidden lg:flex items-center gap-3 bg-white/10 backdrop-blur-xl px-6 py-3 rounded-3xl border border-white/20 text-sm font-medium">
+            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
+            LIMITED DROP LIVE
         </div>
     </section>
 
     <!-- PRODUCTS -->
-    <section id="products" class="py-20 bg-white">
+    <section id="products" class="section-hidden py-24 bg-zinc-950">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div>
-                    <span class="text-yellow-400 text-sm font-medium tracking-widest">SHOP CURATED FAVORITES</span>
-                    <h2 class="text-5xl font-semibold tracking-tighter">Featured Products</h2>
-                </div>
-                <div class="mt-4 md:mt-0 text-sm text-zinc-500">
-                    As an Amazon Associate we earn from qualifying purchases.
-                </div>
+            <div class="text-center mb-16">
+                <span class="px-6 py-2 bg-yellow-400/10 text-yellow-400 text-xs font-bold tracking-[4px] rounded-full">FRESH DROP</span>
+                <h2 class="text-6xl font-bold tracking-tighter mt-4">Featured Vibes</h2>
             </div>
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
 
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Products inserted by JS -->
-            </div>
-
-            <div class="mt-16 text-center text-sm text-zinc-500 max-w-2xl mx-auto">
-                Prices and availability are accurate as of the date/time indicated and are subject to change. 
-                Any price and availability information displayed on Amazon at the time of purchase will apply to the purchase of this product.
+            <!-- Coming soon notice (no 85% off part) -->
+            <div class="mt-16 text-center">
+                <p class="text-xl text-zinc-400 font-medium">
+                    Many more insane deals coming soon...
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- ABOUT (optional - keep or remove) -->
-    <section id="about" class="py-20 bg-zinc-900 text-white">
+    <!-- FOOTER / CONTACT -->
+    <footer id="contact" class="section-hidden bg-black py-20">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-semibold tracking-tighter mb-6">Ideas that move with you</h2>
-            <p class="text-xl text-zinc-300 max-w-3xl mx-auto">
-                We curate products that bridge imagination and everyday life — from smart gear to stylish essentials.
-                <br><br>
-                <strong class="text-yellow-400">Disclosure:</strong> BEST SALES is a participant in the Amazon Services LLC Associates Program, 
-                an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising 
-                and linking to Amazon.com.
-            </p>
-        </div>
-    </section>
+            <div class="logo-font text-6xl font-bold mb-6 tracking-tighter">BEST SALES</div>
+            <p class="text-zinc-400 max-w-md mx-auto text-xl mb-12">from your brain to your footsteps</p>
+            
+            <div class="inline-flex flex-col items-center gap-y-8">
+                <a href="mailto:gupta.9p9@gmail.com" class="flex items-center gap-4 group">
+                    <i class="fa-solid fa-envelope text-3xl text-yellow-400 group-hover:scale-125 transition"></i>
+                    <span class="text-2xl font-light">gupta.9p9@gmail.com</span>
+                </a>
+                <a href="tel:9756690666" class="flex items-center gap-4 group">
+                    <i class="fa-solid fa-phone text-3xl text-yellow-400 group-hover:scale-125 transition"></i>
+                    <span class="text-2xl font-light">97566 90666</span>
+                </a>
+            </div>
 
-    <!-- FOOTER with strong disclosure -->
-    <footer class="bg-zinc-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="logo-font text-4xl font-bold mb-6">BEST SALES</div>
-            <p class="text-zinc-400 mb-6 max-w-2xl mx-auto">
-                from your brain to your footsteps
-            </p>
-
-            <div class="text-sm text-zinc-500 space-y-3">
-                <p>
-                    <strong>Amazon Affiliate Disclosure:</strong> As an Amazon Associate we earn from qualifying purchases. 
-                    We only recommend products we genuinely believe in. Clicking our links may result in us earning a small commission — 
-                    at no extra cost to you. Thank you for supporting the site!
-                </p>
-                <p class="text-xs">
-                    Prices shown are approximate and pulled from Amazon at time of publishing. 
-                    Final price & availability confirmed on Amazon.
-                </p>
-                <p class="pt-4">© 2026 BEST SALES • All rights reserved</p>
+            <div class="mt-16 pt-12 border-t border-white/10 text-xs text-white/30 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p>We may earn a small commission when you purchase through our links.</p>
+                <p>© 2026 BEST SALES • All rights reserved</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // ==================== YOUR PRODUCTS GO HERE ====================
-        // Add as many as you want. Format:
-        // { name, price (number or string), image (url), affiliateLink (full Amazon link with your tag) }
-        // Use short amzn.to links or full dp/B0... links — both work.
-        const products = [
-            {
-                name: "Example Noise-Cancelling Headphones",
-                price: 149.99,
-                image: "https://m.media-amazon.com/images/I/61k2T4a+3QL._AC_SL1500_.jpg",
-                affiliateLink: "https://amzn.to/your-tag-here-20"   // ← replace with real link
-            },
-            {
-                name: "Wireless Fitness Tracker Watch",
-                price: 79.95,
-                image: "https://m.media-amazon.com/images/I/71iNZ+0vVJL._AC_SL1500_.jpg",
-                affiliateLink: "https://www.amazon.com/dp/B08XXXXXXX?tag=yourtag-20"
-            },
-            {
-                name: "Minimalist Running Shoes",
-                price: 119,
-                image: "https://m.media-amazon.com/images/I/81abcDEFgHI._AC_SL1500_.jpg",
-                affiliateLink: "https://amzn.to/another-link-20"
-            },
-            // Add more objects here...
-            // {
-            //     name: "Your Product Title",
-            //     price: 89.00,
-            //     image: "https://m.media-amazon.com/images/I/...",
-            //     affiliateLink: "https://amzn.to/xxxxxx-20"
-            // },
-        ];
+        const products = [{
+            name: "Blind Box Action Figure, Multi Color, Cotton Material, Cartoon Theme, Collectible Toy with Doll",
+            price: 169,
+            image: "https://i.ibb.co/chRBJyZy/Whats-App-Image-2026-03-14-at-2-40-14-PM.jpg",
+            link: "https://amzn.to/4b8jWf0"
+        }];
 
-        // =============================================================
-
-        function renderProducts(filtered = products) {
+        function renderProducts() {
             const grid = document.getElementById('products-grid');
             grid.innerHTML = '';
 
-            filtered.forEach(product => {
+            products.forEach(product => {
                 const card = document.createElement('div');
-                card.className = 'product-card bg-white rounded-3xl overflow-hidden border border-zinc-100 shadow-sm cursor-pointer group';
+                card.className = 'product-card group relative bg-zinc-900 rounded-3xl overflow-hidden border border-white/10';
+                card.setAttribute('data-tilt', '');
+                card.setAttribute('data-tilt-max', '15');
+                card.setAttribute('data-tilt-speed', '800');
+                card.setAttribute('data-tilt-perspective', '1000');
+                card.setAttribute('data-tilt-scale', '1.05');
+                card.setAttribute('data-tilt-glare', 'true');
+                card.setAttribute('data-tilt-max-glare', '0.4');
+
                 card.innerHTML = `
-                    <div class="relative">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover transition-transform group-hover:scale-105">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-medium text-lg mb-2 line-clamp-2">${product.name}</h3>
-                        <div class="text-2xl font-semibold text-yellow-500 mb-5">
-                            $${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
+                    <div class="relative overflow-hidden card-inner">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy" 
+                             class="w-full h-[420px] object-cover transition-all duration-700 group-hover:scale-110">
+                        <div class="shine-overlay"></div>
+                        
+                        <div class="limited-badge absolute top-6 left-6 px-5 py-2 bg-yellow-400 text-zinc-950 text-xs font-black tracking-widest rounded-2xl flex items-center gap-2 shadow-xl">
+                            <span>✦</span> LIMITED DROP
                         </div>
-                        <a href="${product.affiliateLink}" 
-                           target="_blank" rel="noopener noreferrer nofollow"
-                           class="block w-full bg-zinc-900 hover:bg-yellow-400 hover:text-zinc-900 text-white py-4 rounded-3xl font-medium text-center transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-external-link-alt"></i>
-                            View on Amazon
-                        </a>
+                    </div>
+                    <div class="p-8 card-inner">
+                        <h3 class="font-medium text-2xl mb-3 line-clamp-2">${product.name}</h3>
+                        <div class="text-5xl font-bold text-yellow-400 mb-8">₹${product.price}</div>
+                        <div class="block w-full bg-gradient-to-r from-yellow-400 to-amber-300 text-zinc-950 py-6 rounded-3xl font-bold text-xl text-center transition-all active:scale-95 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-bolt"></i>
+                            GET IT NOW
+                        </div>
                     </div>
                 `;
+                card.onclick = (e) => {
+                    if (!e.target.closest('a, button')) {
+                        window.open(product.link, '_blank');
+                    }
+                };
                 grid.appendChild(card);
             });
+
+            VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
         }
 
-        function filterProducts() {
-            const term = document.getElementById('search-input').value.toLowerCase().trim();
-            if (!term) {
-                renderProducts();
-                return;
-            }
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('section-visible');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.section-hidden').forEach(el => observer.observe(el));
         }
 
-        function smoothScrollTo(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        function smoothScrollTo(id) { 
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' }); 
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+        function toggleMobileMenu() { 
+            document.getElementById('mobile-menu').classList.toggle('hidden'); 
         }
 
-        // Init
         window.addEventListener('load', () => {
             renderProducts();
+            initScrollAnimations();
 
-            // Scroll progress bar
             window.addEventListener('scroll', () => {
                 const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
                 const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                document.getElementById('scroll-progress').style.width = scrolled + '%';
+                document.getElementById('scroll-progress').style.width = (winScroll / height) * 100 + '%';
             });
         });
     </script>
