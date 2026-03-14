@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEST SALES • from your brain to your footsteps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+        
+        :root {
+            --primary: 234 179 8;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+                              url('https://i.ibb.co/d4vbFtBG/happy-couple-shopping-outdoors-together.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, rgb(234 179 8), rgb(245 158 11));
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900">
+
+    <!-- SCROLL PROGRESS -->
+    <div id="scroll-progress" class="scroll-progress w-0"></div>
+
+    <!-- NAVBAR -->
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <!-- LOGO -->
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-bolt text-zinc-900 text-2xl"></i>
+                </div>
+                <div>
+                    <span class="logo-font text-3xl font-bold tracking-tighter">BEST</span>
+                    <span class="logo-font text-3xl font-bold tracking-tighter text-yellow-400">SALES</span>
+                </div>
+            </div>
+
+            <!-- DESKTOP MENU -->
+            <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                <a href="#" onclick="smoothScrollTo('hero')" class="hover:text-yellow-400 transition">Home</a>
+                <a href="#" onclick="smoothScrollTo('products')" class="hover:text-yellow-400 transition">Shop</a>
+                <a href="#" onclick="smoothScrollTo('about')" class="hover:text-yellow-400 transition">About</a>
+                <a href="#" onclick="smoothScrollTo('contact')" class="hover:text-yellow-400 transition">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-x-6">
+                <!-- SEARCH -->
+                <div class="relative hidden md:block">
+                    <input id="search-input" 
+                           type="text" 
+                           placeholder="Search products..." 
+                           oninput="filterProducts()"
+                           class="bg-zinc-100 border border-transparent focus:border-yellow-400 focus:bg-white w-72 pl-10 py-2.5 rounded-3xl text-sm outline-none transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                </div>
+
+                <!-- MOBILE HAMBURGER -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-2xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MOBILE MENU -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t px-6 py-6">
+            <div class="flex flex-col gap-y-4 text-lg font-medium">
+                <a href="#" onclick="smoothScrollTo('hero');toggleMobileMenu()" class="py-2">Home</a>
+                <a href="#" onclick="smoothScrollTo('products');toggleMobileMenu()" class="py-2">Shop</a>
+                <a href="#" onclick="smoothScrollTo('about');toggleMobileMenu()" class="py-2">About</a>
+                <a href="#" onclick="smoothScrollTo('contact');toggleMobileMenu()" class="py-2">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" class="hero-bg h-screen flex items-center relative text-white">
+        <div class="max-w-7xl mx-auto px-6 z-10">
+            <div class="max-w-xl">
+                <h1 class="logo-font text-7xl md:text-8xl font-bold leading-none tracking-tighter mb-4">
+                    BEST<br>SALES
+                </h1>
+                <p class="text-2xl md:text-3xl font-light tracking-tight mb-10">
+                    from your brain to your footsteps
+                </p>
+
+                <button onclick="smoothScrollTo('products')" 
+                        class="group inline-flex items-center gap-x-4 bg-white text-zinc-900 px-10 py-6 rounded-3xl text-lg font-semibold hover:bg-yellow-400 transition-all shadow-2xl">
+                    <span>CLICK HERE TO SHOP</span>
+                    <div class="w-8 h-8 bg-zinc-900 text-white rounded-2xl flex items-center justify-center group-hover:rotate-45 transition">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 flex flex-col items-center gap-y-2 text-white/70">
+            <div class="text-[10px] tracking-[3px] font-medium">SCROLL TO DISCOVER</div>
+            <i class="fa-solid fa-chevron-down animate-bounce text-xl"></i>
+        </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="products" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <span class="text-yellow-400 text-sm font-medium tracking-widest">SHOP CURATED FAVORITES</span>
+                    <h2 class="text-5xl font-semibold tracking-tighter">Featured Products</h2>
+                </div>
+                <div class="mt-4 md:mt-0 text-sm text-zinc-500">
+                    As an Amazon Associate we earn from qualifying purchases.
+                </div>
+            </div>
+
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Products inserted by JS -->
+            </div>
+
+            <div class="mt-16 text-center text-sm text-zinc-500 max-w-2xl mx-auto">
+                Prices and availability are accurate as of the date/time indicated and are subject to change. 
+                Any price and availability information displayed on Amazon at the time of purchase will apply to the purchase of this product.
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT (optional - keep or remove) -->
+    <section id="about" class="py-20 bg-zinc-900 text-white">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-semibold tracking-tighter mb-6">Ideas that move with you</h2>
+            <p class="text-xl text-zinc-300 max-w-3xl mx-auto">
+                We curate products that bridge imagination and everyday life — from smart gear to stylish essentials.
+                <br><br>
+                <strong class="text-yellow-400">Disclosure:</strong> BEST SALES is a participant in the Amazon Services LLC Associates Program, 
+                an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising 
+                and linking to Amazon.com.
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER with strong disclosure -->
+    <footer class="bg-zinc-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="logo-font text-4xl font-bold mb-6">BEST SALES</div>
+            <p class="text-zinc-400 mb-6 max-w-2xl mx-auto">
+                from your brain to your footsteps
+            </p>
+
+            <div class="text-sm text-zinc-500 space-y-3">
+                <p>
+                    <strong>Amazon Affiliate Disclosure:</strong> As an Amazon Associate we earn from qualifying purchases. 
+                    We only recommend products we genuinely believe in. Clicking our links may result in us earning a small commission — 
+                    at no extra cost to you. Thank you for supporting the site!
+                </p>
+                <p class="text-xs">
+                    Prices shown are approximate and pulled from Amazon at time of publishing. 
+                    Final price & availability confirmed on Amazon.
+                </p>
+                <p class="pt-4">© 2026 BEST SALES • All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== YOUR PRODUCTS GO HERE ====================
+        // Add as many as you want. Format:
+        // { name, price (number or string), image (url), affiliateLink (full Amazon link with your tag) }
+        // Use short amzn.to links or full dp/B0... links — both work.
+        const products = [
+            {
+                name: "Example Noise-Cancelling Headphones",
+                price: 149.99,
+                image: "https://m.media-amazon.com/images/I/61k2T4a+3QL._AC_SL1500_.jpg",
+                affiliateLink: "https://amzn.to/your-tag-here-20"   // ← replace with real link
+            },
+            {
+                name: "Wireless Fitness Tracker Watch",
+                price: 79.95,
+                image: "https://m.media-amazon.com/images/I/71iNZ+0vVJL._AC_SL1500_.jpg",
+                affiliateLink: "https://www.amazon.com/dp/B08XXXXXXX?tag=yourtag-20"
+            },
+            {
+                name: "Minimalist Running Shoes",
+                price: 119,
+                image: "https://m.media-amazon.com/images/I/81abcDEFgHI._AC_SL1500_.jpg",
+                affiliateLink: "https://amzn.to/another-link-20"
+            },
+            // Add more objects here...
+            // {
+            //     name: "Your Product Title",
+            //     price: 89.00,
+            //     image: "https://m.media-amazon.com/images/I/...",
+            //     affiliateLink: "https://amzn.to/xxxxxx-20"
+            // },
+        ];
+
+        // =============================================================
+
+        function renderProducts(filtered = products) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card bg-white rounded-3xl overflow-hidden border border-zinc-100 shadow-sm cursor-pointer group';
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover transition-transform group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-medium text-lg mb-2 line-clamp-2">${product.name}</h3>
+                        <div class="text-2xl font-semibold text-yellow-500 mb-5">
+                            $${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
+                        </div>
+                        <a href="${product.affiliateLink}" 
+                           target="_blank" rel="noopener noreferrer nofollow"
+                           class="block w-full bg-zinc-900 hover:bg-yellow-400 hover:text-zinc-900 text-white py-4 rounded-3xl font-medium text-center transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            View on Amazon
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterProducts() {
+            const term = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!term) {
+                renderProducts();
+                return;
+            }
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        function smoothScrollTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Init
+        window.addEventListener('load', () => {
+            renderProducts();
+
+            // Scroll progress bar
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('scroll-progress').style.width = scrolled + '%';
+            });
+        });
+    </script>
+</body>
+</html>
