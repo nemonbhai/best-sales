@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BEST SALES • from your brain to your footsteps</title>
-    
+  
     <script>
         const originalWarn = console.warn;
         console.warn = (...args) => {
@@ -15,26 +15,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+  
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
-       
+     
         body { font-family: 'Inter', system-ui, sans-serif; }
         .logo-font { font-family: 'Playfair Display', serif; }
-
         .hero-bg { position: relative; height: 100vh; overflow: hidden; }
         .hero-card {
             position: absolute; inset: 0; background-size: cover; background-position: center;
             opacity: 0; transition: opacity 1.2s ease;
         }
         .hero-card.active { opacity: 1; z-index: 1; }
-
         .glass-nav {
             background: rgba(30, 30, 40, 0.55);
             backdrop-filter: blur(24px) saturate(180%);
             border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-
         .nav-link { position: relative; }
         .nav-link::after {
             content: ''; position: absolute; width: 0; height: 2px; bottom: -6px; left: 0;
@@ -42,21 +39,64 @@
             transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
         .nav-link:hover::after { width: 100%; }
-
         .product-card {
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
             transform-style: preserve-3d;
+            perspective: 1000px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(145deg, #1e1e2e, #111827);
+            border-radius: 1.5rem;
+            position: relative;
         }
-        .product-card:hover { transform: translateY(-16px) scale(1.03); }
-
-        .product-image { width: 100%; height: 260px; object-fit: cover; }
-        @media (min-width: 640px) { .product-image { height: 320px; } }
-        @media (min-width: 1024px) { .product-image { height: 380px; } }
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.025);
+        }
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transform: translateZ(30px);
+            transition: transform 0.4s ease;
+        }
+        .product-card:hover .product-image {
+            transform: translateZ(55px);
+        }
+        .product-content {
+            transform: translateZ(20px);
+            transition: transform 0.4s ease;
+        }
+        .best-seller-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(90deg, #facc15, #fbbf24);
+            color: #111827;
+            font-weight: bold;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+        @media (min-width: 640px) {
+            .product-image { height: 220px; }
+        }
+        @media (min-width: 1024px) {
+            .product-image { height: 260px; }
+        }
+        @media (max-width: 640px) {
+            .product-name { font-size: 1.05rem; line-height: 1.4; }
+            .product-price { font-size: 2rem; }
+            .product-content { padding: 1rem; }
+            .view-btn { padding: 1rem; font-size: 1.1rem; }
+            .best-seller-badge { font-size: 0.75rem; padding: 0.3rem 0.8rem; top: 10px; right: 10px; }
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white">
-
     <!-- NAVBAR -->
     <nav class="glass-nav sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
@@ -67,16 +107,16 @@
             <div class="hidden md:flex gap-x-12 text-base font-semibold">
                 <a href="#" onclick="smoothScrollTo('hero')" class="nav-link">Home</a>
                 <a href="#" onclick="smoothScrollTo('kids-toys')" class="nav-link">Kids & Toys</a>
+                <a href="#" onclick="smoothScrollTo('fashion')" class="nav-link">Fashion</a>
+                <a href="#" onclick="smoothScrollTo('sports')" class="nav-link">Sports</a>
                 <a href="#" onclick="smoothScrollTo('kitchen')" class="nav-link">Kitchen</a>
                 <a href="#" onclick="smoothScrollTo('contact')" class="nav-link">Contact</a>
             </div>
             <button onclick="toggleMobileMenu()" class="md:hidden text-3xl"><i class="fa-solid fa-bars"></i></button>
         </div>
     </nav>
-
-    <!-- HERO (kept changing cards) -->
+    <!-- HERO -->
     <section id="hero" class="hero-bg relative h-screen overflow-hidden">
-        <!-- Card 1 -->
         <div class="hero-card" style="background-image: url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70"></div>
             <div class="relative z-10 text-center px-6">
@@ -84,7 +124,6 @@
                 <p class="text-3xl md:text-4xl font-light text-white/90 mt-8">Discover treasures that spark joy</p>
             </div>
         </div>
-        <!-- Card 2 -->
         <div class="hero-card" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70"></div>
             <div class="relative z-10 text-center px-6">
@@ -92,7 +131,6 @@
                 <p class="text-3xl md:text-4xl font-light text-white/90 mt-8">One click closer to the life you love</p>
             </div>
         </div>
-        <!-- Card 3 -->
         <div class="hero-card" style="background-image: url('https://images.unsplash.com/photo-1523381294911-8d3cead13475?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70"></div>
             <div class="relative z-10 text-center px-6">
@@ -100,8 +138,6 @@
                 <p class="text-3xl md:text-4xl font-light text-white/90 mt-8">Where style meets surprise</p>
             </div>
         </div>
-
-        <!-- Spinning Arrow -->
         <div onclick="smoothScrollTo('kids-toys')" class="absolute bottom-20 left-1/2 -translate-x-1/2 w-20 h-20 bg-gradient-to-r from-yellow-400 to-amber-300 rounded-full flex items-center justify-center cursor-pointer shadow-2xl hover:scale-110 transition">
             <div style="animation: spin 5s linear infinite;">
                 <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="3">
@@ -111,23 +147,34 @@
             </div>
         </div>
     </section>
-
     <!-- KIDS & TOYS -->
-    <section id="kids-toys" class="py-20 bg-zinc-950">
+    <section id="kids-toys" class="py-16 bg-zinc-950">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold tracking-tighter text-center mb-12">Kids & Toys</h2>
-            <div id="kids-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-10">Kids & Toys</h2>
+            <div id="kids-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </section>
-
+    <!-- FASHION & APPAREL -->
+    <section id="fashion" class="py-16 bg-zinc-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-10">Fashion & Apparel</h2>
+            <div id="fashion-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </section>
+    <!-- SPORTS & OUTDOORS -->
+    <section id="sports" class="py-16 bg-zinc-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-10">Sports & Outdoors</h2>
+            <div id="sports-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </section>
     <!-- KITCHEN ESSENTIALS -->
-    <section id="kitchen" class="py-20 bg-zinc-950">
+    <section id="kitchen" class="py-16 bg-zinc-950">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-bold tracking-tighter text-center mb-12">Kitchen Essentials</h2>
-            <div id="kitchen-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-10">Kitchen Essentials</h2>
+            <div id="kitchen-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </section>
-
     <!-- FOOTER -->
     <footer id="contact" class="bg-black py-16 text-center">
         <div class="max-w-7xl mx-auto px-6">
@@ -138,35 +185,67 @@
             <p class="mt-12 text-xs text-white/30">© 2026 BEST SALES • All rights reserved</p>
         </div>
     </footer>
-
+    <!-- Disclaimer -->
+    <div class="text-center py-6 bg-black text-zinc-500 text-sm border-t border-zinc-800">
+        Prices may vary. Check the latest on the product page.
+    </div>
     <script>
-        const kidsProducts = [{
-            name: "Blind Box Action Figure, Multi Color, Cotton Material, Cartoon Theme, Collectible Toy with Doll",
-            price: 169,
-            image: "https://i.ibb.co/chRBJyZy/Whats-App-Image-2026-03-14-at-2-40-14-PM.jpg",
-            link: "https://amzn.to/4b8jWf0"
-        }];
-
-        const kitchenProducts = [{
-            name: "KENT Diamond Induction Cooktop 2000W | 8 Preset Menu | Full Microcrystalline Glass | Feather Touch Buttons & Led Display | Milk Boiling & Keep Warm Function | Overheat Protection & Auto Turn-Off, Radiant, Black",
-            price: 4499,
-            image: "https://i.ibb.co/21gsmWPd/617-Lp-Mji-SSL-SL1500.jpg",
-            link: "https://amzn.to/4rteurN"
-        }];
-
+        const kidsProducts = [
+            { name: "Blind Box Action Figure, Multi Color, Cotton Material, Cartoon Theme, Collectible Toy with Doll", price: 169, image: "https://i.ibb.co/chRBJyZy/Whats-App-Image-2026-03-14-at-2-40-14-PM.jpg", link: "https://amzn.to/4b8jWf0" },
+            { name: "Mattel Uno Playing Card Game for 7 Yrs and Above for Adult, Set of 112 Cards, Multicolor", price: 109, image: "https://i.ibb.co/4ZSqcc6x/81-B-Ki-Fp-Wn-L-SL1500.jpg", link: "https://amzn.to/4luLhLH" },
+            { name: "Cubelelo Drift Explorer 3x3 Speed Cube | Best Starter Speedcube for Beginners | Perfect Brain Teaser for Kids Ages 4 to14 Years Old & Above Boys Girls Children | Smooth Turning Puzzle Toy for Adults", price: 149, image: "https://i.ibb.co/d0HtqSSw/511-Z-YLK7-RL-SL1500.jpg", link: "https://amzn.to/4lujxqJ" }
+        ];
+        const fashionProducts = [
+            { name: "boffi ... 100% Cotton Oversized T-Shirt Unisex Drop Shoulder Dye Washed Street Look Black Pack of 1", price: 284, image: "https://i.ibb.co/zV7xw4Tm/71a-Kz-APz-KFL-SX425.jpg", link: "https://amzn.to/4lNZ809", bestSeller: false },
+            { name: "boffi ... 100% Cotton Oversized T-Shirt Unisex Drop Shoulder Dye Washed Street Look Black Pack of 1", price: 360, image: "https://i.ibb.co/xbQP77H/611qxj1-GFo-L-SY550.jpg", link: "https://amzn.to/40xrmSP", bestSeller: false },
+            { name: "RockinRetailz New VIRAT KOHLI 18 RCCBB Cricket Jersey 2026 Half Sleeve Red", price: 399, image: "https://i.ibb.co/m5XK0qLM/51w-UNWIc5l-L-SY550.jpg", link: "https://amzn.to/3N4jiWN", bestSeller: true }
+        ];
+        const sportsProducts = [
+            {
+                name: "Nivia Encounter 11.0 Football Stud for Mens, TPU Sole with PVC Synthetic Leather Upper for Hard and Grassy Surfaces",
+                price: 809,
+                image: "https://i.ibb.co/zW1DsKWc/81-APs4mwku-L-SY500.jpg",
+                link: "https://amzn.to/4uNbVUH",
+                bestSeller: false
+            },
+            {
+                name: "BRUTON Exclusive Trendy Sports Running Shoes | Casual Shoe | Sneakers for Men's & Boy's",
+                price: 259,
+                image: "https://i.ibb.co/ycszWfmg/61g-Katv2y7-L-SX500.jpg",
+                link: "https://amzn.to/4rvgFva",
+                bestSeller: false
+            },
+            {
+                name: "Women Slipper Stylish Comfortable Lightweight Soft Flaxsible Casual Flip Flop/Girls fancy chappal_BZR-PERENT-TS-001",
+                price: 171,
+                image: "https://i.ibb.co/tnwS7LR/61is-D63-QQj-L-SY395.jpg",
+                link: "https://amzn.to/3PDyafi",
+                bestSeller: false
+            }
+        ];
+        const kitchenProducts = [
+            { name: "KENT Diamond Induction Cooktop 2000W | 8 Preset Menu | Full Microcrystalline Glass | Feather Touch Buttons & Led Display | Milk Boiling & Keep Warm Function | Overheat Protection & Auto Turn-Off, Radiant, Black", price: 4499, image: "https://i.ibb.co/21gsmWPd/617-Lp-Mji-SSL-SL1500.jpg", link: "https://amzn.to/4rteurN" },
+            { name: "Pigeon Polypropylene Mini Handy and Compact Chopper with 3 Blades for Effortlessly Chopping Vegetables and Fruits for Your Kitchen (12420, Green, 400 ml)", price: 189, image: "https://i.ibb.co/QF6nSMwN/5151-BW4-My-EL-SL1000.jpg", link: "https://amzn.to/4ryUDrp" },
+            { name: "PEXPO Water Bottle 1 ltr Stainless Steel Sports/Fridge Bottle with Sipper Cap | Single Wall | For Home, Office, Gym, Travelling | Lightweight | BPA Free | Craft Pro 950ml | Pink-Purple Ombre", price: 289, image: "https://i.ibb.co/6cKcWCps/71-QCfl6-Y5a-L-SL1500.jpg", link: "https://amzn.to/3NpggMD" }
+        ];
         function renderProducts(gridId, products) {
             const grid = document.getElementById(gridId);
             grid.innerHTML = '';
             products.forEach(p => {
                 const card = document.createElement('div');
-                card.className = 'product-card bg-zinc-900 rounded-3xl overflow-hidden border border-white/10';
+                card.className = 'product-card shadow-xl';
+                let badgeHTML = '';
+                if (p.bestSeller) {
+                    badgeHTML = `<div class="best-seller-badge">BEST SELLER</div>`;
+                }
                 card.innerHTML = `
-                    <img src="${p.image}" class="product-image">
-                    <div class="p-6">
-                        <h3 class="font-medium text-xl mb-2 line-clamp-2">${p.name}</h3>
-                        <div class="text-4xl font-bold text-yellow-400 mb-6">₹${p.price}</div>
-                        <div onclick="event.stopImmediatePropagation(); window.open('${p.link}', '_blank')" 
-                             class="w-full bg-gradient-to-r from-yellow-400 to-amber-300 text-zinc-950 py-5 rounded-3xl font-bold text-xl flex items-center justify-center gap-3">
+                    ${badgeHTML}
+                    <img src="${p.image}" class="product-image" alt="${p.name}">
+                    <div class="product-content p-5">
+                        <h3 class="product-name font-medium text-lg md:text-xl mb-2 line-clamp-2">${p.name}</h3>
+                        <div class="product-price text-3xl md:text-4xl font-bold text-yellow-400 mb-5">₹${p.price}</div>
+                        <div onclick="event.stopImmediatePropagation(); window.open('${p.link}', '_blank')"
+                             class="view-btn w-full bg-gradient-to-r from-yellow-400 to-amber-300 text-zinc-950 py-4 rounded-2xl font-bold text-lg md:text-xl flex items-center justify-center gap-3 hover:brightness-110 transition">
                             <i class="fa-solid fa-eye"></i> VIEW MORE
                         </div>
                     </div>
@@ -175,27 +254,37 @@
                 grid.appendChild(card);
             });
         }
-
         function smoothScrollTo(id) {
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
         function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+            alert("Mobile menu coming soon!");
         }
-
         window.addEventListener('load', () => {
             renderProducts('kids-grid', kidsProducts);
+            renderProducts('fashion-grid', fashionProducts);
+            renderProducts('sports-grid', sportsProducts);
             renderProducts('kitchen-grid', kitchenProducts);
-
-            // Hero rotation
             let i = 0;
             const cards = document.querySelectorAll('.hero-card');
-            cards[0].classList.add('active');
-            setInterval(() => {
-                cards[i].classList.remove('active');
-                i = (i + 1) % cards.length;
-                cards[i].classList.add('active');
-            }, 6000);
+            if (cards.length > 0) {
+                cards[0].classList.add('active');
+                setInterval(() => {
+                    cards[i].classList.remove('active');
+                    i = (i + 1) % cards.length;
+                    cards[i].classList.add('active');
+                }, 6000);
+            }
+            VanillaTilt.init(document.querySelectorAll('.product-card'), {
+                max: 14,
+                speed: 650,
+                perspective: 950,
+                scale: 1.04,
+                glare: true,
+                "max-glare": 0.35,
+                gyroscope: true,
+                reset: true
+            });
         });
     </script>
 </body>
